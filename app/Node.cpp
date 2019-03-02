@@ -158,11 +158,7 @@ Node* Node::newnode(int mat[3][3], int x, int y, int newX,int newY, int level, N
 
 
 void Node::explorechild(Node* root,int final[3][3]) {
-  if (ismatrixequal(root->mat,final)){
-    std::cout << "Solved: \n";
-    printpath(root);
-    return;
-  }
+
   cout << root->level<< "\n";
   if (moveleft(root) && norepetition(root, root->x,root->y, root->x, root->y-1 )){
     root->childleft = newnode(root->mat, root->x,
@@ -211,6 +207,12 @@ void Node::explorechild(Node* root,int final[3][3]) {
 
 
 void Node::setnextnode(Node * root,int final[3][3]) {
+  if (ismatrixequal(root->mat,final)){
+      std::cout << "Solved: \n";
+      printpath(root);
+      return;
+    }
+  else {
 
   if (root->parent == NULL) {
 
@@ -272,6 +274,7 @@ void Node::setnextnode(Node * root,int final[3][3]) {
   root->nextnode->nodenumber = root->nodenumber+1;
   explorechild(root->nextnode,final);
   setnextnode(root->nextnode,final);
+}
 }
 
 void Node::shift_to_uncle_childnode(Node* root) {
