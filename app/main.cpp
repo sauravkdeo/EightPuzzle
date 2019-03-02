@@ -45,13 +45,12 @@ using std::vector;
 
 // Driver code
 int main() {
-/*  int initial[3][3] = {{0, 2, 3}, {1, 5, 6}, {4, 7, 8}};*/
-  int initial[3][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
+
   int final[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
   int x, y;
   // Initial configuration
   // Value 0 is used for empty space
- /* int initial[3][3];
+  int initial[3][3];
   int value;
   cout << "please feed the initial configutaion of the puzzles : \n \n";
   for (int i = 0; i < 3; i++) {
@@ -61,7 +60,7 @@ int main() {
       cin >> value;
       initial[i][j] = value;
     }
-  }*/
+  }
 
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++)
