@@ -1,4 +1,6 @@
 # Eight Puzzle
+
+[![Build Status](https://travis-ci.org/sauravkdeo/Steering-Control-Module.svg?branch=master)](https://travis-ci.org/sauravkdeo/Steering-Control-Module)
 ---
 
 ## Overview
