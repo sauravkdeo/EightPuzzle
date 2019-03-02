@@ -1,5 +1,4 @@
 # Eight Puzzle
-[![Build Status](https://travis-ci.org/sauravkdeo/EightPuzzle.svg?branch=master](https://travis-ci.org/sauravkdeo/EightPuzzle)
 ---
 
 ## Overview
