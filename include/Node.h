@@ -86,7 +86,7 @@ class Node {
 
   bool norepetition(Node*, int , int , int ,int );
 
-  void explorechild(Node*,int[3][3]);
+  void explorechild(Node*);
   bool ismatrixequal(int[3][3],int[3][3]);
   void explorebreadth(Node* ,int[3][3]);
   void setnextnode(Node* ,int[3][3]);

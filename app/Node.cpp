@@ -86,14 +86,16 @@ bool Node::moveright(Node* current) {
   }
 }
 void Node::printMatrix(int mat[3][3]) {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++){
-      cout << mat[i][j] << "\t";
-    }
-    cout << "\n";
-  }
-  cout << "\n";
 
+  ofstream nodePath;
+  nodePath.open("nodePath.txt", std::ofstream::out | std::ofstream::app);
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      nodePath << mat[j][i] << "\t ";
+    }
+  }
+  nodePath << "\n";
+  nodePath.close();
 }
 
 
@@ -103,7 +105,7 @@ void Node::solve(int initial[3][3], int x, int y,
 
   Node* root = newnode(initial, x, y, x, y, 0, NULL);
   root->nodenumber = 1;
-  explorechild(root,final);
+  explorechild(root);
   setnextnode(root,final);
 
 
@@ -157,9 +159,7 @@ Node* Node::newnode(int mat[3][3], int x, int y, int newX,int newY, int level, N
 }
 
 
-void Node::explorechild(Node* root,int final[3][3]) {
-
-  cout << root->level<< "\n";
+void Node::explorechild(Node* root) {
   if (moveleft(root) && norepetition(root, root->x,root->y, root->x, root->y-1 )){
     root->childleft = newnode(root->mat, root->x,
                               root->y, root->x,
@@ -207,74 +207,88 @@ void Node::explorechild(Node* root,int final[3][3]) {
 
 
 void Node::setnextnode(Node * root,int final[3][3]) {
-  if (ismatrixequal(root->mat,final)){
-      std::cout << "Solved: \n";
-      printpath(root);
-      return;
+  ofstream Nodes;
+  Nodes.open("Nodes.txt", std::ofstream::out | std::ofstream::app);
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      Nodes << root->mat[j][i] << "\t ";
     }
+  }
+  Nodes << "\n";
+  Nodes.close();
+  ofstream NodeInfo;
+  NodeInfo.open("NodeInfo.txt", std::ofstream::out | std::ofstream::app);
+  NodeInfo << root->nodenumber << "\t " << root ->level << "\t ";
+  NodeInfo << "\n";
+  NodeInfo.close();
+  if (ismatrixequal(root->mat,final)){
+    std::cout << "Solved: \n";
+    printpath(root);
+    return;
+  }
   else {
 
-  if (root->parent == NULL) {
+    if (root->parent == NULL) {
 
-    if (root->childleft != NULL) {
-      root->nextnode = root->childleft;
+      if (root->childleft != NULL) {
+        root->nextnode = root->childleft;
+      }
+      else if (root->childup != NULL) {
+        root->nextnode = root->childup;
+      }
+      else if (root->childright != NULL) {
+        root->nextnode = root->childright;
+      }
+      else if (root->childdown != NULL) {
+        root->nextnode = root->childdown;
+      }
     }
-    else if (root->childup != NULL) {
-      root->nextnode = root->childup;
+
+
+    else if (root != NULL) {
+      if(root == root->parent->childleft) {
+
+        if (root->parent->childup != NULL) {
+          root->nextnode = root->parent->childup;
+
+        }
+        else if (root->parent->childright != NULL) {
+          root->nextnode = root->parent->childright;
+        }
+        else if (root->parent->childdown != NULL) {
+          root->nextnode = root->parent->childdown;
+        }
+
+        else shift_to_uncle_childnode(root);
+      }
+
+      else if(root == root->parent->childup) {
+        if (root->parent->childright != NULL) {
+          root->nextnode = root->parent->childright;
+
+        }
+        else if (root->parent->childdown != NULL) {
+          root->nextnode = root->parent->childdown;
+        }
+        else shift_to_uncle_childnode(root);
+
+      }
+
+      else if(root == root->parent->childright) {
+        if (root->parent->childdown != NULL) {
+          root->nextnode = root->parent->childdown;
+
+        }
+        else shift_to_uncle_childnode(root);
+      }
+      else if (root == root->parent->childdown) {
+        shift_to_uncle_childnode(root);
+      }
     }
-    else if (root->childright != NULL) {
-      root->nextnode = root->childright;
-    }
-    else if (root->childdown != NULL) {
-      root->nextnode = root->childdown;
-    }
+    root->nextnode->nodenumber = root->nodenumber+1;
+    explorechild(root->nextnode);
+    setnextnode(root->nextnode,final);
   }
-
-
-  else if (root != NULL) {
-    if(root == root->parent->childleft) {
-
-      if (root->parent->childup != NULL) {
-        root->nextnode = root->parent->childup;
-
-      }
-      else if (root->parent->childright != NULL) {
-        root->nextnode = root->parent->childright;
-      }
-      else if (root->parent->childdown != NULL) {
-        root->nextnode = root->parent->childdown;
-      }
-
-      else shift_to_uncle_childnode(root);
-    }
-
-    else if(root == root->parent->childup) {
-      if (root->parent->childright != NULL) {
-        root->nextnode = root->parent->childright;
-
-      }
-      else if (root->parent->childdown != NULL) {
-        root->nextnode = root->parent->childdown;
-      }
-      else shift_to_uncle_childnode(root);
-
-    }
-
-    else if(root == root->parent->childright) {
-      if (root->parent->childdown != NULL) {
-        root->nextnode = root->parent->childdown;
-
-      }
-      else shift_to_uncle_childnode(root);
-    }
-    else if (root == root->parent->childdown) {
-      shift_to_uncle_childnode(root);
-    }
-  }
-  root->nextnode->nodenumber = root->nodenumber+1;
-  explorechild(root->nextnode,final);
-  setnextnode(root->nextnode,final);
-}
 }
 
 void Node::shift_to_uncle_childnode(Node* root) {

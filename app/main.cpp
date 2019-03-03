@@ -38,13 +38,21 @@
 #include <../include/Node.h>
 #include <bits/stdc++.h>
 #include <iostream>
+#include <fstream>
 using std::cout;
 using std::endl;
 using std::cin;
 using std::vector;
+using std::ofstream;
 
 // Driver code
 int main() {
+  ofstream nodePath;
+  nodePath.open("nodePath.txt", std::ofstream::out | std::ofstream::trunc);
+  ofstream Nodes;
+  Nodes.open("Nodes.txt", std::ofstream::out | std::ofstream::trunc);
+  ofstream NodeInfo;
+  NodeInfo.open("NodeInfo.txt", std::ofstream::out | std::ofstream::trunc);
 
   int final[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
   int x, y;
